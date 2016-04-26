@@ -10,3 +10,8 @@ exports.check = function(req, res, next) {
 	var result = ((answer === 'Roma') ? 'Correcta': 'Incorrecta');
 	res.render('quizzes/result', {result: result, answer: answer});
 };
+
+//GET /credits
+exports.credits = function(req, res, next) {
+	res.render('quizzes/credits');
+};
