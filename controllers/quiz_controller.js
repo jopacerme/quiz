@@ -2,7 +2,7 @@ var models = require('../models');
 
 
 //GET /question
-exports.question = function(req, res, ext) {
+exports.question = function(req, res, next) {
 	models
 	.Quiz
 	.findOne() //Busca primera pregunta
