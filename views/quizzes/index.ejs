@@ -1,4 +1,15 @@
+
 <table>
+	<form method='get' action='/quizzes'>
+		<tr >
+			<td>
+  				<input type='text' name='search' placeholder='Texto a buscar' />
+  			</td>
+  			<td>	
+  				<input type='submit' value='Enviar' />
+  			</td>
+		</tr>
+	</form>
 	<% for (var i in quizzes) { %>
 		<tr>
 			<td>

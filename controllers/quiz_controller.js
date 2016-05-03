@@ -17,13 +17,25 @@ exports.load = function(req, res, next, quizId) {
 };
 
 exports.index = function(req, res, next){
-	models
-	.Quiz
-	.findAll()
-	.then(function(quizzes){
-		res.render('quizzes/index.ejs', { quizzes: quizzes});
-	})
-	.catch(function(error) {next(error);});
+	if (req.query.search){
+		var busca = req.query.search.split(' ');
+		busca = '%' + busca.join('%') + '%';
+		models
+		.Quiz
+		.findAll({where: [ 'question like ?' ,  busca]})
+		.then(function(quizzes){
+			res.render('quizzes/index.ejs', { quizzes: quizzes});
+		})
+		.catch(function(error) {next(error);});
+	} else {
+		models
+		.Quiz
+		.findAll()
+		.then(function(quizzes){
+			res.render('quizzes/index.ejs', { quizzes: quizzes});
+		})
+		.catch(function(error) {next(error);});
+	}
 };
 
 
