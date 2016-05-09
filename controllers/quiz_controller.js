@@ -16,6 +16,12 @@ exports.load = function(req, res, next, quizId) {
 	}).catch(function(error) {next(error); });
 };
 
+//GET /quizzes/new
+exports.new = function(req, res, next) {
+	var quiz = models.Quiz.build({question: '', answer: ''});
+	res.render('quizzes/new', {quiz: quiz});
+};
+
 exports.index = function(req, res, next){
 	if (req.query.search){
 		var busca = req.query.search.split(' ');
@@ -70,7 +76,20 @@ exports.check = function(req, res) {
 	}).catch(function(error) {next(error); });
 };
 
+//POST /quizzes/create
 
+exports.create = function(req, res, next){
+	var quiz = models.Quiz.build({ question: req.body.quiz.question,
+									answer: req.body.quiz.answer});
+	//guarda en DB los campos pregunta y respueta de quiz
+	quiz.save({fields: ['question', 'answer']})
+		.then(function(quiz) {
+			res.redirect('/quizzes');
+		})
+		.catch(function(error){
+			next(error);
+		});
+};
 
 //GET /credits
 exports.credits = function(req, res, next) {
