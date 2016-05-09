@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var partials = require('express-partials');
 var flash = require('express-flash');
+var methodOverride = require('method-override');
 
 var routes = require('./routes/index');
 //var users = require('./routes/users');
@@ -19,6 +20,7 @@ app.set('view engine', 'ejs');
 
 app.use(partials());
 app.use(flash());
+app.use(methodOverride('_method', {methods: ['POST', 'GET']}));
 
 // uncomment after placing your favicon in /public
 app.use(favicon(__dirname + '/public/favicon.ico'));
