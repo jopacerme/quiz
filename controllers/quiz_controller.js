@@ -6,7 +6,7 @@ var Sequelize = require('sequelize');
 exports.load = function(req, res, next, quizId) {
 	models
 	.Quiz
-	.findById(quizId) 
+	.findById(quizId, { include: [ models.Comment ] }) 
 	.then(function(quiz){
 		if(quiz){
 			req.quiz = quiz;

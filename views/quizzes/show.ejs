@@ -5,3 +5,11 @@
   <input type='submit' value='Enviar' />
 </form>
 <br />
+<p> <a href='/quizzes/<%= quiz.id %>/comments/new'><button>Nuevo Comentario</button></a></p>
+
+<strong>Comentarios:<strong></p>
+<ul>
+<% for (var i in quiz.Comments) { %>
+	<li> <%=quiz.Comments[i].text %> </li>
+<% } %>
+</ul>
