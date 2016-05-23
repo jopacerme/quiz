@@ -131,10 +131,12 @@ exports.update = function (req, res, next){
 
 //POST /quizzes/create
 exports.create = function(req, res, next){
+	var authorId =req.session.useer && req.session.user.id || 0;
 	var quiz = models.Quiz.build({ question: req.body.quiz.question,
-									answer: req.body.quiz.answer});
+									answer: req.body.quiz.answer,
+								    AuthorId: authorId} );
 	//guarda en DB los campos pregunta y respueta de quiz
-	quiz.save({fields: ['question', 'answer']})
+	quiz.save({fields: ['question', 'answer', 'AuthorId']})
 		.then(function (quiz) {
 			req.flash('success', 'Quiz creado con exito.');
 			res.redirect('/quizzes');

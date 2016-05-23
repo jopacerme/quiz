@@ -30,6 +30,9 @@ var User = sequelize.import(path.join(__dirname, 'user'));
 Comment.belongsTo(Quiz);
 Quiz.hasMany(Comment);
 
+User.hasMany(Quiz, {foreignKey: 'AuthorId'});
+Quiz.belongsTo(User, {as:'Author', foreignKey: 'AuthorId'});
+
 /*sequelize
 .sync()
 .then(function(){
