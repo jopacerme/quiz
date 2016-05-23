@@ -33,8 +33,15 @@ app.use(session({secret: 'Quiz 2016',
                  saveUninitialized: true}));
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+app.use(function(req, res, next){
+    res.locals.session = req.session;
+    next();
+});
+
 app.use('/', routes);
 //app.use('/users', users);
+
 
 
 
