@@ -22,7 +22,7 @@ var authenticate = function(login, password) {
         });
 }; 
 
-exports.loginRequired = function(res, req, next) {
+exports.loginRequired = function(req, res, next) {
 	if (req.session.user) {
 		next();
 	} else {
