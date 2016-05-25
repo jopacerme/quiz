@@ -5,7 +5,11 @@
   <input type='submit' value='Enviar' />
 </form>
 <br />
-<p> <a href='/quizzes/<%= quiz.id %>/comments/new'><button>Nuevo Comentario</button></a></p>
+<% if (session.user) { %>
+	<p> 
+		<a href='/quizzes/<%= quiz.id %>/comments/new'><button>Nuevo Comentario</button></a>
+	</p>
+<% } %>
 
 <strong>Comentarios:<strong></p>
 <ul>

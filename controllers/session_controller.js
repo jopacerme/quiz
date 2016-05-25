@@ -22,6 +22,14 @@ var authenticate = function(login, password) {
         });
 }; 
 
+exports.loginRequired = function(res, req, next) {
+	if (req.session.user) {
+		next();
+	} else {
+		res.redirect('session?redir=' + (req.param('redir') || req.url));
+	}
+}
+
 
 
 // GET /session   -- Formulario de login
