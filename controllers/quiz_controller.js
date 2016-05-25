@@ -1,7 +1,18 @@
 var models = require('../models');
 var Sequelize = require('sequelize');
 
+exports.ownershipRequired = function(req, res, next){
+	var isAdmin = req.session.user.isAdmin;
+	var quizAuthorId = req.quiz.AuthorId;
+	var loggedUserId = req.session.user.id;
 
+	if (isAdmin || quizAuthorId === loggedUserId){
+		next()
+	} else {
+		console.log('Operación prohibida: El usuario logueado no es el autor del quiz, ni un administrador.');
+		res.send(403);
+	}
+};
 
 exports.load = function(req, res, next, quizId) {
 	models
@@ -131,7 +142,7 @@ exports.update = function (req, res, next){
 
 //POST /quizzes/create
 exports.create = function(req, res, next){
-	var authorId =req.session.useer && req.session.user.id || 0;
+	var authorId =req.session.user && req.session.user.id || 0;
 	var quiz = models.Quiz.build({ question: req.body.quiz.question,
 									answer: req.body.quiz.answer,
 								    AuthorId: authorId} );

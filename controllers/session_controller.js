@@ -60,7 +60,7 @@ exports.create = function(req, res, next) {
             if (user) {
     	        // Crear req.session.user y guardar campos id y username
     	        // La sesión se define por la existencia de: req.session.user
-    	        req.session.user = {id:user.id, username:user.username};
+    	        req.session.user = {id:user.id, username:user.username, isAdmin:user.isAdmin};
 
                 res.redirect(redir); // redirección a redir
             } else {
@@ -72,6 +72,35 @@ exports.create = function(req, res, next) {
             req.flash('error', 'Se ha producido un error: ' + error);
             next(error);        
     });
+};
+
+exports.adminOrMyselfRequired = function(req, res, next){
+
+    var isAdmin      = req.session.user.isAdmin;
+    var userId       = req.user.id;
+    var loggedUserId = req.session.user.id;
+
+    if (isAdmin || userId === loggedUserId) {
+        next();
+    } else {
+      console.log('Ruta prohibida: no es el usuario logeado, ni un administrador.');
+      res.send(403);    }
+};
+
+// MW que permite gestionar un usuario solamente si el usuario logeado es:
+//   - admin
+//   - y no es el usuario a gestionar.
+exports.adminAndNotMyselfRequired = function(req, res, next){
+
+    var isAdmin      = req.session.user.isAdmin;
+    var userId       = req.user.id;
+    var loggedUserId = req.session.user.id;
+
+    if (isAdmin || userId === loggedUserId) {
+        next();
+    } else {
+      console.log('Ruta prohibida: no es el usuario logeado, ni un administrador.');
+      res.send(403);    }
 };
 
 
