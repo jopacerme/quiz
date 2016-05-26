@@ -22,7 +22,7 @@ exports.ownershipRequired = function(req, res, next){
 exports.load = function(req, res, next, quizId) {
 	models
 	.Quiz
-	.findById(quizId, { include: [ models.Comment, models.Attachment ] }) 
+	.findById(quizId, {include: [{model:models.Attachment}, {model:models.Comment, include:[{model:models.User, as:'Author'}]}]})
 	.then(function(quiz){
 		if(quiz){
 			req.quiz = quiz;
@@ -56,7 +56,8 @@ exports.index = function(req, res, next){
 		.Quiz
 		.findAll()
 		.then(function(quizzes){
-			res.json('quizzes/index.ejs', { quizzes: quizzes});
+			var json = JSON.stringify(quizzes);
+			res.send(json);
 		})
 		.catch(function(error) {next(error);});
 	}
@@ -79,8 +80,8 @@ exports.show = function(req, res, next) {
 		.findById(req.params.quizId) 
 		.then(function(quiz){
 			if(quiz){
-				var answer = req.query.answer || '';
-				res.json('quizzes/show', {quiz: req.quiz, answer: answer});
+				var json = JSON.stringify(quiz);
+				res.send(json);
 			} else {
 				throw new Error('No hay preguntas en la BBDD');
 			}

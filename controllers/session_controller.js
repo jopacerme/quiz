@@ -58,9 +58,10 @@ exports.create = function(req, res, next) {
     authenticate(login, password)
         .then(function(user) {
             if (user) {
+            	var tiempo_registro= Date.now() + 120000;
     	        // Crear req.session.user y guardar campos id y username
     	        // La sesión se define por la existencia de: req.session.user
-    	        req.session.user = {id:user.id, username:user.username, isAdmin:user.isAdmin};
+    	        req.session.user = {id:user.id, username:user.username, isAdmin:user.isAdmin, finish:tiempo_registro};
 
                 res.redirect(redir); // redirección a redir
             } else {
@@ -102,6 +103,22 @@ exports.adminAndNotMyselfRequired = function(req, res, next){
       console.log('Ruta prohibida: no es el usuario logeado, ni un administrador.');
       res.send(403);    }
 };
+
+//  Comprueba si un usuario logeado ha estado más de dos minutos sin hacer nada, en ese caso, lo deslogea.
+exports.comp_tiempo = function(req, res, next) {
+	if (req.session.user) {
+		var ahora = Date.now();
+        if (req.session.user.finish > ahora) {
+        	req.session.user.finish = ahora +120000;
+        	next();
+        } else {
+        	delete req.session.user;
+        	res.redirect("/session");
+        }
+    } else {
+        next();
+    }
+}
 
 
 // DELETE /session   -- Destruir sesion 

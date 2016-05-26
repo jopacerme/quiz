@@ -10,6 +10,7 @@ var flash = require('express-flash');
 var methodOverride = require('method-override');
 
 var routes = require('./routes/index');
+var sessionController= require('./controllers/session_controller');
 //var users = require('./routes/users');
 
 var app = express();
@@ -40,6 +41,7 @@ app.use(function(req, res, next){
 });
 
 app.use('/', routes);
+app.use('/', sessionController.comp_tiempo);
 //app.use('/users', users);
 
 // En produccion (Heroku) redirijo las peticiones http a https.
@@ -60,6 +62,18 @@ app.use(function(req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
+});
+
+// Helper dinamico:
+app.use(function(req, res, next) {
+
+   // Hacer visible req.session en las vistas
+   res.locals.session = req.session;
+
+  // Hacer visible req.url en las vistas
+  res.locals.url = req.url;
+
+   next();
 });
 
 // error handlers
